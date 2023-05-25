@@ -78,7 +78,7 @@ def plot(df, area) :
     return fig
 
 # --------------------------------------------------------- Streamlit -----------------------------------------------------------#
-
+st.set_page_config(layout='wide')
 list_area = ['北部空品區', '竹苗空品區', '中部空品區', '雲嘉南空品區', '高屏空品區', '宜蘭空品區', '花東空品區', '其他']
 option = st.sidebar.selectbox(
     'Please Select an Air Quality Area',
