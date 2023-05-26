@@ -28,9 +28,11 @@ def tidydata(air_df, site_df):
     df['concentration'] = pd.to_numeric(df['concentration'], errors='coerce')
     print(df.dtypes['concentration'])
 
-    # 分割欄位
+    # 日期格式設定
     df['monitormonth'] = df['monitormonth'].astype(str)
     df[['year', 'month']] = df['monitormonth'].str.extract(r'(.{4})(.*)')
+    df['monitormonth'] = pd.to_datetime(df['year'].astype(str) + '-' + df['month'].astype(str), format='%Y-%m')
+    df['monitormonth'] = df['monitormonth'].dt.strftime('%Y/%m')
 
     return df
 
@@ -39,10 +41,10 @@ def transform(df) :
 
     temp = df[df['itemengname'] == 'AMB_TEMP']
     temp['temperature'] = temp['concentration']
-    temp = temp[['year', 'month', 'sitename', 'county', 'areaname', 'temperature']]
+    temp = temp[['monitormonth', 'sitename', 'county', 'areaname', 'temperature']]
 
     df = df[df['itemengname'].isin(['NOx', 'SO2'])]
-    mergeKey = ['year', 'month', 'sitename', 'county', 'areaname']
+    mergeKey = ['monitormonth', 'sitename', 'county', 'areaname']
     merge = pd.merge(df, temp, on=mergeKey)
 
     # 空值處理
@@ -52,11 +54,11 @@ def transform(df) :
 
     return merge
 
-tidy = transform(tidydata(air_data, site_data))
-columns_to_keep = ['year', 'month', 'sitename', 'county', 'areaname', 'temperature', 'itemengname', 'concentration', 'monitormonth']
-tidy = tidy.reindex(columns=columns_to_keep)
+tidyData = transform(tidydata(air_data, site_data))
+columns_to_keep = ['monitormonth', 'sitename', 'county', 'areaname', 'temperature', 'itemengname', 'concentration']
+tidyData = tidyData.reindex(columns=columns_to_keep)
 
-print('\nTidy Data :\n', tidy)
+# print('\nTidy Data :\n', tidyData)
 
 # ---------------------------------------------------------- Plotly ----------------------------------------------------------#
 
@@ -68,7 +70,7 @@ def plot(df, area) :
 
     fig = px.scatter(df, x='concentration', y="temperature", size='concentration',
                 color="itemengname", hover_name="sitename", log_x=True, size_max=60, 
-                animation_frame='year', animation_group='sitename', range_x=[_min, _max], range_y=[0, 40],
+                animation_frame='monitormonth', animation_group='sitename', range_x=[_min, _max], range_y=[0, 40],
                 labels=dict(itemengname='Measurement Item', concentration='Concentration (ppb)', temperature='Temperature (℃)'))
     
     for trace in fig.data:
@@ -87,5 +89,5 @@ option = st.sidebar.selectbox(
     'Please Select an Air Quality Area',
     list_area)
 
-st.plotly_chart(plot(tidy, option), theme=None, use_container_width=True)
+st.plotly_chart(plot(tidyData, option), theme=None, use_container_width=True)
 
