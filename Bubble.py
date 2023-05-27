@@ -74,7 +74,7 @@ def plot(df, area) :
                 labels=dict(itemengname='Measurement Item', concentration='Concentration (ppb)', temperature='Temperature (℃)'))
     
     fig.update_layout(
-        width = 980,
+        width = 800,
         sliders=[
             dict(
                 active=0,
