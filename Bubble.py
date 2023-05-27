@@ -74,7 +74,7 @@ def plot(df, area) :
                 labels=dict(itemengname='Measurement Item', concentration='Concentration (ppb)', temperature='Temperature (℃)'))
     
     fig.update_layout(
-        width = 800,
+        # width = 800,
         sliders=[
             dict(
                 active=0,
@@ -98,6 +98,14 @@ list_area = ['北部空品區', '竹苗空品區', '中部空品區', '雲嘉南
 option = st.sidebar.selectbox(
     'Please Select an Air Quality Area',
     list_area)
+
+st.markdown("""
+<style>
+    .plot-container {
+        width: 800px;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 st.plotly_chart(plot(tidyData, option), theme=None, use_container_width=True)
 
