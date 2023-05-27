@@ -92,20 +92,12 @@ def plot(df, area) :
 # --------------------------------------------------------- Streamlit -----------------------------------------------------------#
 st.set_page_config(layout='wide')
 
-st.header('Do different regions and temperature conditions contribute to an increase in the concentrations of acid rain precursors (NOx, SO2)?')
+st.title('Does the concentration of NOx and SO2 increase in different areas and temperatures?')
 
 list_area = ['北部空品區', '竹苗空品區', '中部空品區', '雲嘉南空品區', '高屏空品區', '宜蘭空品區', '花東空品區', '其他']
 option = st.sidebar.selectbox(
     'Please Select an Air Quality Area',
     list_area)
-
-st.markdown("""
-<style>
-    .plot-container plotly {
-        width: 800px;
-    }
-</style>
-""", unsafe_allow_html=True)
 
 st.plotly_chart(plot(tidyData, option), theme=None, use_container_width=True)
 
