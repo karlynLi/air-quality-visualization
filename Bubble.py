@@ -101,7 +101,7 @@ option = st.sidebar.selectbox(
 
 st.markdown("""
 <style>
-    .plot-container {
+    .plot-container plotly {
         width: 800px;
     }
 </style>
