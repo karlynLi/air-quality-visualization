@@ -73,6 +73,16 @@ def plot(df, area) :
                 animation_frame='monitormonth', animation_group='sitename', range_x=[_min, _max], range_y=[0, 40],
                 labels=dict(itemengname='Measurement Item', concentration='Concentration (ppb)', temperature='Temperature (℃)'))
     
+    fig.update_layout(
+        width = 980,
+        sliders=[
+            dict(
+                active=0,
+                currentvalue={"prefix": "MonitorTime: "},
+            )
+        ]
+    )
+    
     for trace in fig.data:
         trace.marker.line.width = 1
         trace.marker.line.color = 'white'
